@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05070f" />
+    <title>Portafolio AR | Grupo Diseño de Interfaces</title>
+
+    <link rel="stylesheet" href="./style.css?v=8" />
+
+    <!-- Import map: permite usar imports ES6 limpios desde main.js. -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+          "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="ar-container" class="ar-stage" aria-label="Escena de realidad aumentada"></section>
+
+      <div class="scan-guide" aria-hidden="true">
+        <div class="scan-frame">
+          <span class="scan-line"></span>
+          <span class="scan-corner top-left"></span>
+          <span class="scan-corner top-right"></span>
+          <span class="scan-corner bottom-left"></span>
+          <span class="scan-corner bottom-right"></span>
+        </div>
+        <span class="scan-hint">Ubica la tarjeta completa dentro del marco</span>
+      </div>
+
+      <div id="loader" class="loader-screen" role="status" aria-live="polite">
+        <div class="loader-card">
+          <span class="scanner"></span>
+          <p id="loader-message">Cargando experiencia AR</p>
+          <div class="loader-actions">
+            <button id="retry-button" class="loader-action" type="button">Reintentar AR</button>
+            <button id="fallback-portfolio-button" class="loader-action secondary" type="button">
+              Abrir portafolio
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <header class="topbar fade-in">
+        <div>
+          <p class="eyebrow">Ingeniería de Software · Diseño de Interfaces</p>
+          <h1>Portafolio AR del Grupo</h1>
+        </div>
+        <span id="tracking-status" class="status-pill">Buscando target</span>
+      </header>
+
+      <aside class="instruction-panel fade-in" aria-label="Instrucciones de uso">
+        <img src="./assets/card.jpg" alt="Tarjeta objetivo para activar el portafolio AR" />
+        <div>
+          <p class="panel-label">Instrucción</p>
+          <strong>Apunta la cámara hacia la tarjeta</strong>
+          <span>Mantén la imagen completa dentro del encuadre para activar el contenido.</span>
+        </div>
+      </aside>
+
+      <section id="portfolio-panel" class="portfolio-panel" aria-label="Panel del portafolio">
+        <p class="panel-label">Target detectado</p>
+        <h2>Experiencia interactiva activa</h2>
+        <p>
+          Explora una muestra académica de interfaz, prototipado y realidad aumentada con
+          modelo 3D, texto flotante y tarjeta digital del equipo.
+        </p>
+        <div class="quick-stats" aria-label="Resumen del portafolio">
+          <span><strong>03</strong> integrantes</span>
+          <span><strong>10</strong> skills</span>
+          <span><strong>AR</strong> demo</span>
+        </div>
+        <button id="portfolio-button" class="primary-button" type="button">Ver Portafolio</button>
+      </section>
+
+      <section
+        id="portfolio-modal"
+        class="portfolio-modal"
+        aria-modal="true"
+        aria-labelledby="portfolio-title"
+        role="dialog"
+      >
+        <div class="portfolio-backdrop" data-close-portfolio></div>
+        <article class="portfolio-content">
+          <header class="portfolio-header">
+            <div>
+              <p class="eyebrow">Portafolio académico UI/UX</p>
+              <h2 id="portfolio-title">Diseño de interfaces con enfoque inmersivo</h2>
+            </div>
+            <button
+              id="close-portfolio"
+              class="icon-button"
+              type="button"
+              aria-label="Cerrar portafolio"
+            >
+              ×
+            </button>
+          </header>
+
+          <div class="profile-strip">
+            <div>
+              <span class="profile-kicker">Ingeniería de Software</span>
+              <h3>Luis Olmedo Velasco, Allison Garcia y Daniel Alejandro Perez.</h3>
+            </div>
+            <p>
+              Este portafolio AR fue desarrollado para la materia Diseño de Interfaces como una
+              experiencia web interactiva que combina image tracking, contenido 3D y una
+              presentación clara del trabajo del grupo.
+            </p>
+          </div>
+
+          <div class="portfolio-grid">
+            <article class="work-item">
+              <span class="work-index">01</span>
+              <h3>Portafolio AR con MindAR</h3>
+              <p>Experiencia web que reconoce una tarjeta objetivo y activa contenido aumentado con Three.js.</p>
+            </article>
+            <article class="work-item">
+              <span class="work-index">02</span>
+              <h3>Sistema Visual Responsive</h3>
+              <p>Interfaz adaptable con jerarquía tipográfica, estados visuales y componentes reutilizables.</p>
+            </article>
+            <article class="work-item">
+              <span class="work-index">03</span>
+              <h3>Prototipo de Usabilidad</h3>
+              <p>Flujo conceptual para evaluar navegación, claridad de contenido e interacción del usuario.</p>
+            </article>
+          </div>
+
+          <section class="skills-section" aria-label="Habilidades">
+            <h3>Habilidades</h3>
+            <div class="skill-list">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>Three.js</span>
+              <span>MindAR</span>
+              <span>UX/UI</span>
+              <span>Prototipado</span>
+              <span>Responsive UI</span>
+              <span>Pruebas de usabilidad</span>
+              <span>Ingeniería de Software</span>
+            </div>
+          </section>
+
+          <footer class="portfolio-footer">
+            <span>Proyecto académico desarrollado para Diseño de Interfaces.</span>
+            <a class="secondary-link" href="#ar-container" data-close-portfolio>Volver a AR</a>
+          </footer>
+        </article>
+      </section>
+
+      <div id="toast" class="toast" role="alert"></div>
+    </main>
+
+    <script>
+      window.__arAppBooted = false;
+      window.setTimeout(() => {
+        if (!window.__arAppBooted) {
+          const message = document.querySelector("#loader-message");
+          const retry = document.querySelector("#retry-button");
+          if (message) {
+            message.textContent =
+              "No se pudo iniciar AR. Revisa internet, permisos de cámara y Live Server.";
+          }
+          if (retry) {
+            retry.classList.add("is-visible");
+          }
+        }
+      }, 9000);
+    </script>
+    <script type="module" src="./main.js?v=8"></script>
+  </body>
+</html>

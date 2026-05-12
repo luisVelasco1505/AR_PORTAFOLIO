@@ -1,0 +1,7 @@
+project/.chrome-test/
+project/.chrome-webgl-test/
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
