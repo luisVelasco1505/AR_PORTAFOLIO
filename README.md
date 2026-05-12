@@ -40,6 +40,12 @@ La app debe abrirse desde HTTPS para que el navegador permita usar la cámara.
 
 Este proyecto no necesita Node.js en producción. GitHub Pages solo sirve los archivos estáticos de la carpeta `project`. Node se usa únicamente como una opción para probar localmente con un servidor sencillo.
 
+Si GitHub Pages está configurado como `Deploy from a branch`, la raíz del repositorio redirige automáticamente a:
+
+```text
+./project/
+```
+
 ## Prueba Local
 
 Abrir el proyecto con un servidor local desde la carpeta `project`.
