@@ -11,6 +11,11 @@
   --green: #b9ff5c;
   --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
   --radius: 8px;
+  --edge-gap: clamp(12px, 2vw, 22px);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -22,11 +27,13 @@
 html,
 body {
   width: 100%;
+  height: 100%;
   min-height: 100%;
   margin: 0;
   overflow: hidden;
   background: var(--bg);
   color: var(--text);
+  overscroll-behavior: none;
 }
 
 button {
@@ -35,9 +42,11 @@ button {
 
 .app-shell {
   position: relative;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
-  min-height: 620px;
+  height: 100svh;
+  height: 100dvh;
+  min-height: 0;
   overflow: hidden;
   background:
     linear-gradient(rgba(84, 243, 255, 0.07) 1px, transparent 1px),
@@ -89,12 +98,13 @@ button {
 .scan-guide {
   position: absolute;
   left: 50%;
-  top: 53%;
+  top: 52%;
   z-index: 2;
   display: grid;
   justify-items: center;
   gap: 12px;
-  width: min(78vw, 620px);
+  width: min(76vw, 640px);
+  max-width: calc(100vw - ((var(--edge-gap) * 2) + var(--safe-left) + var(--safe-right)));
   pointer-events: none;
   opacity: 1;
   transform: translate(-50%, -50%);
@@ -198,16 +208,16 @@ button {
 
 .topbar {
   position: absolute;
-  top: 22px;
-  left: 22px;
-  right: 22px;
+  top: calc(var(--edge-gap) + var(--safe-top));
+  left: calc(var(--edge-gap) + var(--safe-left));
+  right: calc(var(--edge-gap) + var(--safe-right));
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  min-height: 76px;
-  padding: 16px 18px;
+  min-height: clamp(62px, 9dvh, 76px);
+  padding: clamp(12px, 1.8vw, 16px) clamp(14px, 2vw, 18px);
   border-radius: var(--radius);
 }
 
@@ -229,7 +239,7 @@ p {
 
 h1 {
   margin-bottom: 0;
-  font-size: clamp(1.35rem, 3vw, 2rem);
+  font-size: clamp(1.18rem, 2.6vw, 2rem);
   line-height: 1;
 }
 
@@ -256,13 +266,13 @@ h1 {
 
 .instruction-panel {
   position: absolute;
-  left: 22px;
-  bottom: 22px;
+  left: calc(var(--edge-gap) + var(--safe-left));
+  bottom: calc(var(--edge-gap) + var(--safe-bottom));
   z-index: 3;
   display: grid;
   grid-template-columns: 86px minmax(0, 1fr);
   gap: 14px;
-  width: min(430px, calc(100vw - 44px));
+  width: min(430px, calc(100vw - ((var(--edge-gap) * 2) + var(--safe-left) + var(--safe-right))));
   padding: 14px;
   border-radius: var(--radius);
   background: var(--panel-strong);
@@ -294,10 +304,10 @@ h1 {
 
 .portfolio-panel {
   position: absolute;
-  right: 22px;
-  bottom: 120px;
+  right: calc(var(--edge-gap) + var(--safe-right));
+  bottom: calc(108px + var(--edge-gap) + var(--safe-bottom));
   z-index: 3;
-  width: min(360px, calc(100vw - 44px));
+  width: min(360px, calc(100vw - ((var(--edge-gap) * 2) + var(--safe-left) + var(--safe-right))));
   padding: 18px;
   border-radius: var(--radius);
   opacity: 0;
@@ -382,7 +392,11 @@ h1 {
   z-index: 7;
   display: grid;
   place-items: center;
-  padding: 22px;
+  padding:
+    calc(var(--edge-gap) + var(--safe-top))
+    calc(var(--edge-gap) + var(--safe-right))
+    calc(var(--edge-gap) + var(--safe-bottom))
+    calc(var(--edge-gap) + var(--safe-left));
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -408,7 +422,7 @@ h1 {
   display: grid;
   gap: 18px;
   width: min(980px, 100%);
-  max-height: min(820px, calc(100dvh - 44px));
+  max-height: min(820px, calc(100dvh - ((var(--edge-gap) * 2) + var(--safe-top) + var(--safe-bottom))));
   overflow: auto;
   padding: clamp(18px, 3vw, 28px);
   border-radius: var(--radius);
@@ -663,7 +677,7 @@ h1 {
 .toast {
   position: absolute;
   left: 50%;
-  bottom: 24px;
+  bottom: calc(var(--edge-gap) + var(--safe-bottom));
   z-index: 6;
   max-width: min(440px, calc(100vw - 40px));
   padding: 12px 14px;
@@ -710,34 +724,48 @@ h1 {
 }
 
 @media (max-width: 720px) {
-  .app-shell {
-    min-height: 100dvh;
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: auto;
+    gap: 10px;
+    padding: 12px;
   }
 
-  .topbar {
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    align-items: flex-start;
-    flex-direction: column;
-    min-height: auto;
-    padding: 14px;
+  .topbar > div {
+    min-width: 0;
+  }
+
+  .eyebrow {
+    font-size: 0.6rem;
+    line-height: 1.25;
+  }
+
+  h1 {
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+    line-height: 1.08;
   }
 
   .status-pill {
-    width: 100%;
+    width: auto;
+    min-width: 112px;
+    padding: 8px 10px;
+    font-size: 0.74rem;
   }
 
   .instruction-panel {
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
+    left: calc(12px + var(--safe-left));
+    right: calc(12px + var(--safe-right));
+    bottom: calc(12px + var(--safe-bottom));
     width: auto;
     grid-template-columns: 76px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
   }
 
   .scan-guide {
-    top: 52%;
+    top: 50%;
     width: min(88vw, 520px);
   }
 
@@ -756,13 +784,14 @@ h1 {
   }
 
   .portfolio-panel {
-    right: 12px;
-    left: 12px;
-    bottom: auto;
-    top: 104px;
+    right: calc(12px + var(--safe-right));
+    left: calc(12px + var(--safe-left));
+    top: auto;
+    bottom: calc(12px + var(--safe-bottom));
     width: auto;
-    max-height: calc(100dvh - 258px);
+    max-height: min(42dvh, 330px);
     overflow: auto;
+    padding: 14px;
   }
 
   .portfolio-panel.is-visible {
@@ -770,18 +799,23 @@ h1 {
   }
 
   .app-shell.is-target-active .instruction-panel {
-    opacity: 0.72;
+    opacity: 0;
     transform: translateY(8px);
+    pointer-events: none;
   }
 
   .portfolio-modal {
     align-items: end;
-    padding: 12px;
+    padding:
+      calc(12px + var(--safe-top))
+      calc(12px + var(--safe-right))
+      calc(12px + var(--safe-bottom))
+      calc(12px + var(--safe-left));
   }
 
   .portfolio-content {
     width: 100%;
-    max-height: calc(100dvh - 24px);
+    max-height: calc(100dvh - (24px + var(--safe-top) + var(--safe-bottom)));
     border-radius: var(--radius);
   }
 
@@ -822,6 +856,129 @@ h1 {
   .secondary-link {
     width: 100%;
     text-align: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .topbar {
+    padding: 10px;
+  }
+
+  .eyebrow {
+    font-size: 0.56rem;
+  }
+
+  .status-pill {
+    min-width: 104px;
+    padding: 7px 8px;
+  }
+
+  .instruction-panel {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .instruction-panel img {
+    width: 64px;
+  }
+
+  .instruction-panel strong {
+    font-size: 0.9rem;
+  }
+
+  .instruction-panel span,
+  .portfolio-panel p,
+  .portfolio-content p {
+    font-size: 0.84rem;
+  }
+
+  .portfolio-panel h2 {
+    font-size: 1.08rem;
+  }
+
+  .quick-stats {
+    gap: 6px;
+    margin: 12px 0;
+  }
+
+  .quick-stats span {
+    padding: 8px 5px;
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-height: 560px) {
+  .topbar {
+    min-height: 48px;
+    padding: 8px 10px;
+  }
+
+  .eyebrow {
+    display: none;
+  }
+
+  h1 {
+    font-size: 1rem;
+  }
+
+  .status-pill {
+    min-width: 104px;
+    padding: 7px 9px;
+    font-size: 0.72rem;
+  }
+
+  .scan-guide {
+    top: 55%;
+    width: min(54vw, 420px);
+  }
+
+  .scan-hint {
+    display: none;
+  }
+
+  .scan-corner {
+    width: 34px;
+    height: 34px;
+  }
+
+  .instruction-panel {
+    right: auto;
+    grid-template-columns: 58px minmax(0, 1fr);
+    width: min(360px, calc(100vw - ((var(--edge-gap) * 2) + var(--safe-left) + var(--safe-right))));
+    padding: 10px;
+  }
+
+  .instruction-panel img {
+    width: 58px;
+  }
+
+  .instruction-panel span {
+    display: none;
+  }
+
+  .portfolio-panel {
+    left: auto;
+    right: calc(var(--edge-gap) + var(--safe-right));
+    bottom: calc(var(--edge-gap) + var(--safe-bottom));
+    width: min(340px, calc(100vw - ((var(--edge-gap) * 2) + var(--safe-left) + var(--safe-right))));
+    max-height: calc(100dvh - (76px + var(--safe-top) + var(--safe-bottom)));
+    padding: 12px;
+  }
+
+  .portfolio-panel p {
+    display: none;
+  }
+
+  .portfolio-panel h2 {
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  .quick-stats {
+    margin: 10px 0;
+  }
+
+  .primary-button {
+    min-height: 40px;
   }
 }
 
